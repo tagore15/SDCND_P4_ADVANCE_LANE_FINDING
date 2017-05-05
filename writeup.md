@@ -13,7 +13,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./camera_cal/calibration1.jpg "distorted camera calibration image"
+[image1]: ./output_images/distort.png "distored calibration image"
 [image2]: ./output_images/cal1.png "undistorted camera calibration image"
 [image3]: ./test_images/straight_lines1.jpg "distorted road image"
 [image4]: ./output_images/cal2.png "undistorted road image"
