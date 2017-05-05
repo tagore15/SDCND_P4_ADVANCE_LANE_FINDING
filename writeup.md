@@ -25,7 +25,8 @@ The goals / steps of this project are the following:
 [image10]: ./output_images/poly.png "polygon fit in lane curvature"
 [image11]: ./output_images/radius.png "polygon fit in lane curvature"
 [image12]: ./output_images/inverse.png "inverse perspective of detected lane back to orignal image"
-[video1]: ./project_video.mp4 "Video"
+[image13]: ./output_images/binary_warp.png "binary perspective transformation"
+[video1]: ./project_output.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -45,7 +46,7 @@ You're reading it!
 
 The code for this step is contained in the camera calibration section of the IPython notebook "sol.ipynb".  
 
-I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard corners detection through opencv function findChessboardCorners.  
+I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard corners detection through opencv function `findChessboardCorners`.  
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result:
 
@@ -62,7 +63,7 @@ UNDISTORTED CALIBRATION IMAGE
 
 #### 1. Provide an example of a distortion-corrected image.
 
-Using opencv function `undistort`, I undistorted the images in my pipeline. Consider below images:-
+Using opencv function `undistort` and camera calibration parameters found in last section, I undistorted the images in my pipeline. Consider below images:-
 
 ORIGINAL DISTORTED ROAD IMAGE
 
@@ -75,21 +76,21 @@ UNDISTORTED ROAD IMAGE
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding code is in `thresh_bin` function of `sol.ipynb`. Here's an example of my output for this step from undistorted road image in last step.
+I used a combination of color and gradient thresholds to generate a binary image (thresholding code is in `thresh_bin` function of `sol.ipynb`). Here's an example of my output for this step from undistorted road image in last step.
 
 ![binary thresholded image][image5]
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform is in PERSPECTIVE TRANSFORM section of `sol.ipynb`. I have harcoded the source and destination points as following:  
+The code for my perspective transform is in PERSPECTIVE TRANSFORM section of `sol.ipynb`. I have hardcoded the source and destination points as following:  
 
 This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
 | 220, 700      | 200, 700      | 
-| 1100, 700     | 1000, 700     |
-| 680, 450      | 1000, 10      |
+| 1100, 700     | 800, 700      |
+| 680, 450      | 800, 10       |
 | 600, 450      | 200, 10       |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image as shown below.
@@ -102,13 +103,15 @@ WARPED IMAGE
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-For indentifyin lane lines, I did following steps on binary warped image after perspective transformation from last step
+For indentifying lane lines, I did following steps on below binary warped image after perspective transformation from last step in one of curved lane   
+![binary_image][image13]
+
 
 1) First I take a histogram of bottom half of image and finds left and right points from center where pixel intensity is highest.
 
 ![histogram left and right lane][image8]
 
-2) Then I start from bottom and start sliding windows from bottom to top for both left and right lanes. I have set number of windows to 9 and height of each window is 80 pixel. Now I iterate on each window and have margin of around 100 around center. I keep finding points lying within windows and update center of next window as per mean of points in current window. Check below image for sliding windows.
+2) Then I start from bottom and slide windows from bottom to top for both left and right lanes. I have set number of windows to 9 and height of each window is 80 pixel. Now I iterate on each window and have margin of around 100 around center of windows. I keep finding points lying within windows and update center of next window as per mean of points in current window. Check below image for sliding windows.
 
 ![window][image9]
 
@@ -119,11 +122,13 @@ For indentifyin lane lines, I did following steps on binary warped image after p
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I found radius of curvature and position of vehicle with respect to center in `RADIUS OF CURVATURE` section of sol.ipynb. For finding radius I used following formula provided in lessons and also converted pixel number to meter in both x and y direction. 
+I found radius of curvature and position of vehicle with respect to center in `RADIUS OF CURVATURE` section of sol.ipynb. For finding radius I used following formula provided in lessons and also converted pixel number to meter in both x and y direction.   
+
+![radius_curvature][image11]
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+Finally I applied inverse perspective transform on lane portion to merge it with original road image. Code is in INVERSE PERSPECTIVE TRANSFORM section of solution notebook `sol.ipynb`. Here is an example of my result on a test image:
 
 ![inverse_warp][image12]
 
@@ -133,7 +138,7 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+I combine all steps applied on a single image above in a pipeline applied on video frames. Here's a [link to my video result](./project_output.mp4).
 
 ---
 
@@ -141,4 +146,4 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+In this project, we applied gradient and color thresholding to get binary image with possible edge positions. After getting birds eye view of lane for curvature detection, we fit a polynomial through detected lane points. We needed to check threshold range for gradients and also selected source and destination points for perspective transformation such that straight lines are parallel after transformation. We still need to take into account affect of larger shadows and glare to try on harder challenge videos where there could be break in lanes. We can smooth lane area in current frame using location of lane in previous frame as lane is continuous in subsequent frames. We can also finetune gradient and color thresholds to better detect lane portion of image while disregarding other sections.
