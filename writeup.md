@@ -86,10 +86,10 @@ The code for my perspective transform is in PERSPECTIVE TRANSFORM section of `so
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 220, 700      | 200, 700      | 
-| 1100, 700     | 800, 700      |
-| 680, 450      | 800, 10       |
-| 600, 450      | 200, 10       |
+| 220, 700      | 300, 700      | 
+| 1100, 700     | 1000, 700     |
+| 680, 450      | 1000, 10      |
+| 600, 450      | 300, 10       |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image as shown below.
 
@@ -147,4 +147,4 @@ I combine all steps applied on a single image above in a pipeline applied on vid
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-In this project, we applied gradient and color thresholding to get binary image with possible edge positions. After getting birds eye view of lane for curvature detection, we fit a polynomial through detected lane points. We needed to check threshold range for gradients and also selected source and destination points for perspective transformation such that straight lines are parallel after transformation. We still need to take into account affect of larger shadows and glare to try on harder challenge videos where there could be break in lanes. We can smooth lane area in current frame using location of lane in previous frame as lane is continuous in subsequent frames. We can also finetune gradient and color thresholds to better detect lane portion of image while disregarding other sections.
+In this project, we applied gradient and color thresholding to get binary image with possible edge positions. After getting birds eye view of lane for curvature detection, we fit a polynomial through detected lane points. We needed to check threshold range for gradients and also selected source and destination points for perspective transformation such that straight lines are parallel after transformation. We applied Red color threshold to detect white and yellow lines while removing shadows. We still need to take into account affect of larger shadows and glare to try on harder challenge videos where there could be break in lanes. We can smooth lane area in current frame using location of lane in previous frame as lane is continuous in subsequent frames. We can also finetune gradient and color thresholds to better detect lane portion of image while disregarding other sections.
