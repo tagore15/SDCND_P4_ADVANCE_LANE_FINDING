@@ -23,7 +23,7 @@ The goals / steps of this project are the following:
 [image8]: ./output_images/histogram.png "histogram"
 [image9]: ./output_images/window.png "window for lane detection"
 [image10]: ./output_images/poly.png "polygon fit in lane curvature"
-[image11]: ./output_images/radius.png "polygon fit in lane curvature"
+[image11]: ./output_images/radius.PNG "radius equation"
 [image12]: ./output_images/inverse.png "inverse perspective of detected lane back to orignal image"
 [image13]: ./output_images/binary_warp.png "binary perspective transformation"
 [video1]: ./project_output.mp4 "Video"
@@ -84,8 +84,6 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 The code for my perspective transform is in PERSPECTIVE TRANSFORM section of `sol.ipynb`. I have hardcoded the source and destination points as following:  
 
-This resulted in the following source and destination points:
-
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
 | 220, 700      | 200, 700      | 
@@ -95,15 +93,18 @@ This resulted in the following source and destination points:
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image as shown below.
 
-ACTUAL IMAGE
+ACTUAL IMAGAE    
+
 ![warped original image][image6]
 
-WARPED IMAGE
+WARPED IMAGE    
+
 ![warped transformed image][image7]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-For indentifying lane lines, I did following steps on below binary warped image after perspective transformation from last step in one of curved lane   
+For indentifying lane lines, I did following steps on below binary warped image after perspective transformation from last step. Take following sample binary image of bird eye view of lane   
+
 ![binary_image][image13]
 
 
@@ -122,7 +123,7 @@ For indentifying lane lines, I did following steps on below binary warped image 
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I found radius of curvature and position of vehicle with respect to center in `RADIUS OF CURVATURE` section of sol.ipynb. For finding radius I used following formula provided in lessons and also converted pixel number to meter in both x and y direction.   
+I found radius of curvature and position of vehicle with respect to center in `RADIUS OF CURVATURE` section of `sol.ipynb`. For finding radius I used following formula provided in lessons and also converted pixel number to meter in both x and y direction.   
 
 ![radius_curvature][image11]
 
